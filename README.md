@@ -1,0 +1,2 @@
+# notal
+Notasi Algoritmik Compiler
