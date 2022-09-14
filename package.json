@@ -1,0 +1,14 @@
+{
+  "name": "notal",
+  "version": "1.0.0",
+  "description": "Notasi Algoritmik Compiler",
+  "main": "app.js",
+  "type": "module",
+  "repository": "https://github.com/Zoffyn/notal",
+  "author": "Sofyan Firdaus",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "eslint": "^8.23.1"
+  }
+}
