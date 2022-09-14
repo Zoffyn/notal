@@ -2,10 +2,7 @@ import Parser from '../src/Parser.js';
 
 const parser = new Parser();
 
-const program = `"Hello
-Nama
-Saya
-Sofyan"`;
+const program = `    140    `;
 
 const ast = parser.parse(program);
 

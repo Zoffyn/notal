@@ -1,6 +1,7 @@
 const TOKEN_SPEC = [
     [/^\d+/, 'NUMBER'],
-    [/^"[^"]*"/, 'STRING']
+    [/^"[^"]*"/, 'STRING'],
+    [/^\s+/, null],
 ];
 
 /**
@@ -45,7 +46,10 @@ export default class Tokenizer {
         for (const [regexp, tokenType] of TOKEN_SPEC) {
             const tokenValue = this._match(regexp, string);
 
+            // Unreachable
             if (tokenValue == null) continue;
+            // Skip whitespaces
+            if (tokenType == null) return this.getNextTokens();
             return {
                 type: tokenType,
                 value: tokenValue,
