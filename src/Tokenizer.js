@@ -1,3 +1,8 @@
+const TOKEN_SPEC = [
+    [/^\d+/, 'NUMBER'],
+    [/^"[^"]*"/, 'STRING']
+];
+
 /**
  * Tokenizer class.
  *
@@ -36,38 +41,32 @@ export default class Tokenizer {
 
         const string = this._string.slice(this._cursor);
         const start = this._currentLineColumn();
-        // Numbers:
-        if (!Number.isNaN(Number(string[0]))) {
-            let number = '';
-            while (!Number.isNaN(Number(string[this._cursor]))) {
-                number += string[this._incrementCursor()];
-            }
-            return {
-                type: 'NUMBER',
-                value: number,
-                span: {
-                    start,
-                    end: this._currentLineColumn()
-                }
-            }
-        }
 
-        // String:
-        if (string[0] === '"') {
-            let s = '';
-            do {
-                s += string[this._incrementCursor()];
-            } while (string[this._cursor] !== '"' && !this.isEOF());
-            s += string[this._incrementCursor()];
+        for (const [regexp, tokenType] of TOKEN_SPEC) {
+            const tokenValue = this._match(regexp, string);
+
+            if (tokenValue == null) continue;
             return {
-                type: 'STRING',
-                value: s,
+                type: tokenType,
+                value: tokenValue,
                 span: {
                     start,
                     end: this._currentLineColumn()
                 }
             }
         }
+        throw new SyntaxError(`Unexpected token: "${string[0]}"`)
+    }
+
+    _match(regexp, string) {
+        const matched = regexp.exec(string);
+        if (matched == null) {
+            return null;
+        }
+        for (let i = 0; i < matched[0].length; i++) {
+            this._incrementCursor()
+        }
+        return matched[0];
     }
 
     _incrementCursor() {
